@@ -3,7 +3,8 @@
 $id = $_POST['id'] ?? null;
 
 
-require_once "database.php";
+require_once "../../database.php";
+
 
 if (!$id) {
     header("Location: index.php");

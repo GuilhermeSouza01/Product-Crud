@@ -1,7 +1,8 @@
 <?php
 
-require_once "database.php";
-require_once "functions.php";
+require_once "../../database.php";
+require_once "../../functions.php";
+
 
 $id = $_GET['id'] ?? null;
 
@@ -26,36 +27,9 @@ $price = $product['price'];
 
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $title = $_POST['title'];
-    $description = $_POST['description'];
-    $price = $_POST['price'];
 
+    require_once '../../validate_product.php';
 
-
-    $image = $_FILES['image'] ?? null;
-    $imagePath = $product['image'];
-
-
-
-    if (!is_dir('images')) {
-        mkdir('images');
-    }
-
-    if ($image && $image['tmp_name']) {
-        if ($product['image']) {
-            unlink($product['image']);
-        }
-        $imagePath = 'images/' . randomString(8) . '/' . $image['name'];
-        mkdir(dirname($imagePath));
-        move_uploaded_file($image['tmp_name'], $imagePath);
-    }
-
-    if (!$title) {
-        $errors[] = 'Product title is required';
-    }
-    if (!$price) {
-        $errors[] = 'Product price is required';
-    }
 
     if (empty($errors)) {
         $statement = $pdo->prepare("UPDATE products SET title = :title, 
@@ -77,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 ?>
 
 
-<?php include_once "views/partials/header.php" ?>
+<?php include_once "../../views/partials/header.php" ?>
 
 <p>
     <a href="index.php" class="btn btn-secondary">Go back to the Products</a>
@@ -85,7 +59,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <h1>Edit Product <b><?php echo $product['title'] ?></b> </h1>
 
-<?php include_once "views/products/form.php" ?>
+<?php include_once "../../views/products/form.php" ?>
 
 </body>
 
